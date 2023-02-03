@@ -1,4 +1,4 @@
-echnical part of the work Amberi:
+technical part of the work Amberi:
 The first part uses the transformer library to implement natural language processing tasks. It uses two different pre-trained models, GPT-2 and BERT.
 
   GPT-2 is a text generation model, and the script uses it to generate text as a continuation of the input text "Hello, I'm a language model".

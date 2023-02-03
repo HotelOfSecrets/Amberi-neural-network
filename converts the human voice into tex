@@ -1,31 +1,24 @@
-Here is the code for a neural network that converts a human voice to text and then translates it into the selected language using the Google Translate API:
+Our project is a Recurrent Neural Network (RNN) that matches voice input to game scenes.
+We gather a large dataset of voice inputs and their corresponding game scenes, preprocess the voice inputs to convert them into numerical representations, 
+and split the dataset into training and testing sets. We use a Long Short-Term Memory (LSTM) network to train the model on the training set.
+The model's performance is evaluated on the testing set and fine-tuned as needed. Finally,
+the trained model can generate game scenes based on a given voice input.
+
+principle of operation:
 
 import tensorflow as tf
-import requests
+from tensorflow.keras.layers import Input, LSTM, Dense
 
-# Speech-to-text model using Tensorflow
-def speech_to_text():
-    # Preprocess the audio data and build the model
-    audio = ...
-    model = tf.keras.Sequential([
-        ...
-    ])
+# Define the model architecture
+input_voice = Input(shape=(timesteps, input_dim))
+x = LSTM(units=hidden_units)(input_voice)
+output = Dense(units=output_dim, activation='softmax')(x)
 
-    # Perform prediction on the audio data and return the transcript
-    transcript = model.predict(audio)
-    return transcript
+model = Model(inputs=input_voice, outputs=output)
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-# Translation function using the Google Translate API
-def translate(text, target_language):
-    API_KEY = "YOUR_API_KEY"
-    url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={target_language}&dt=t&q={text}"
-    response = requests.get(url)
-    translated_text = response.json()[0][0][0]
-    return translated_text
+# Train the model on the training data
+model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val))
 
-# Main function
-if name == "main":
-    transcript = speech_to_text()
-    target_language = "fr" # Example target language: French
-    translated_text = translate(transcript, target_language)
-    print(translated_text)
+# Use the model to generate a game scene based on a given voice input
+predictions = model.predict(X_test)

@@ -1,0 +1,31 @@
+Here is the code for a neural network that converts a human voice to text and then translates it into the selected language using the Google Translate API:
+
+import tensorflow as tf
+import requests
+
+# Speech-to-text model using Tensorflow
+def speech_to_text():
+    # Preprocess the audio data and build the model
+    audio = ...
+    model = tf.keras.Sequential([
+        ...
+    ])
+
+    # Perform prediction on the audio data and return the transcript
+    transcript = model.predict(audio)
+    return transcript
+
+# Translation function using the Google Translate API
+def translate(text, target_language):
+    API_KEY = "YOUR_API_KEY"
+    url = f"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={target_language}&dt=t&q={text}"
+    response = requests.get(url)
+    translated_text = response.json()[0][0][0]
+    return translated_text
+
+# Main function
+if name == "main":
+    transcript = speech_to_text()
+    target_language = "fr" # Example target language: French
+    translated_text = translate(transcript, target_language)
+    print(translated_text)

@@ -1,3 +1,4 @@
 # Amberi-neural-network
 This is our advanced neural network of our own production. She is a companion of our 3D sex game in VR mode.
 Amberi is a cutting-edge neural network that serves as a mediator between two players, helping to generate and launch a game scene. With a built-in voice assistant that speaks 30 different languages, including Hindi and Simplified Chinese, Amberi is more than just a tool - it's a companion. With the ability to extract motion from video and convert it into data that can be used in Unreal Engine 5, Amberi is revolutionizing the way we experience video games. Whether you're looking for a more immersive gaming experience or just a new way to have fun, Amberi is the perfect choice.
+![2023-02-01_17-15-34](https://user-images.githubusercontent.com/124265441/216617446-e688f494-4d75-4dd9-b0fb-b3e6e2f29f27.png)

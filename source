@@ -1,0 +1,527 @@
+Collecting base
+!pip install transformers
+import transformers
+import pandas as pd
+import numpy as np
+import string
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+from collections import Counter
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+from keras.preprocessing.sequence import pad_sequences
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'], maxlen=max_length, padding='post')
+
+# Load the pre-trained GPT2 model
+tokenizer = transformers.GPT2Tokenizer.from_pretrained("gpt2")
+model = transformers.GPT2LMHeadModel.from_pretrained("gpt2")
+model.eval()
+
+# Generate input ids from a given text
+input_ids = torch.tensor(tokenizer.encode("Hello, I am a language model.")).unsqueeze(0)
+
+# Generate predictions for GPT2
+with torch.no_grad():
+    outputs = model(input_ids)
+    predictions = outputs[0]
+
+# Get the predicted next word(s)
+predicted_next_word = tokenizer.decode(torch.argmax(predictions[0, -1, :]).tolist())
+print(f"Predicted next word (GPT2): {predicted_next_word}")
+
+# Load the pre-trained BERT model for sequence classification
+tokenizer = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
+model = transformers.BertForSequenceClassification.from_pretrained("bert-base-uncased")
+model.eval()
+
+# Generate input 
+
+Готовый номер 2 
+!pip install transformers
+import transformers
+import string
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import pandas as pd
+import numpy as np
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'], maxlen=max_length, padding='post')
+
+# Load the pre-trained GPT2 model
+tokenizer = transformers.GPT2Tokenizer.from_pretrained("gpt2")
+model = transformers.GPT2LMHeadModel.from_pretrained("gpt2")
+model.eval()
+
+# Generate input ids from a given text
+input_ids = torch.tensor(tokenizer.encode("Hello, I am a language model.")).unsqueeze(0)
+
+GPT-2
+
+# Generate predictions for GPT2
+with torch.no_grad():
+    outputs = model(input_ids)
+    predictions = outputs[0]
+
+# Get the predicted next word(s)
+predicted_next_word = tokenizer.decode(torch.argmax(predictions[0, -1, :]).tolist())
+print(f"Predicted next word (GPT2): {predicted_next_word}")
+
+# Load the pre-trained BERT model for sequence classification
+tokenizer = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
+model = transformers.BertForSequenceClassification.from_pretrained("bert-base-uncased")
+model.eval()
+
+# Generate input ids from a given text
+input_ids = torch.t
+ 
+3ая версия import string
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import pandas as pd
+import numpy as np
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+import transformers
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'], maxlen=max_length, padding='post')
+
+# Load the pre-trained machine translation model
+model = transformers.TFRobertaForCausalLM.from_pretrained("roberta-base")
+model.eval()
+
+# Generate input ids from a given text
+input_text = "Hello, I am a language model."
+input_ids = torch.tensor(tokenizer.encode(input_text, add_special_tokens=True)).unsqueeze(0)
+
+# Generate predictions for the machine translation model
+with torch.no_grad():
+    outputs = model.generate(input_ids, max_length=max_length, num_beams=1, repetition_penalty=1.0, length_
+
+
+translate 
+
+import string
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import pandas as pd
+import numpy as np
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+import transformers
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'], maxlen=max_length, padding='post')
+
+# Load the pre-trained machine translation model
+model = transformers.TFRobertaForCausalLM.from_pretrained("roberta-base")
+model.eval()
+
+# Generate input ids from a given text
+input_text = "Hello, I am a language model."
+input_ids = torch.tensor(tokenizer.encode(input_text, add_special_tokens=True)).unsqueeze(0)
+
+# Generate predictions for the machine translation model
+with torch.no_grad():
+    outputs = model.generate(input_ids, max_length=max_length, num_beams=1, repetition_penalty=1.0, length_
+
+import tensorflow as tf
+
+# Load audio data
+audio_data = ...
+
+# Pre-processing audio data
+preprocessed_audio_data = ...
+
+# Split data into training and testing sets
+train_data, test_data = ...
+
+# Create RNN model
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.LSTM(units=128, input_shape=(None, audio_data.shape[1]), return_sequences=True))
+model.add(tf.keras.layers.LSTM(units=128, return_sequences=True))
+model.add(tf.keras.layers.Dense(units=audio_data.shape[1]))
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+
+# Train the model
+model.fit(train_data, train_data, epochs=100, batch_size=32)
+
+# Evaluate the model
+test_loss = model.evaluate(test_data, test_data)
+print("Test loss: ", test_loss)
+
+# Use the model for predictions
+predictions = model.predict(preprocessed_audio_data
+
+answering a question and predicting the answer
+
+# Initialize the GPT-2 model
+import transformers
+model_name = "gpt2"
+model = transformers.GPT2Model.from_pretrained(model_name)
+tokenizer = transformers.GPT2Tokenizer.from_pretrained(model_name)
+
+# Use the model to answer a question
+prompt = "What is your name?"
+input_ids = tokenizer.encode(prompt, return_tensors='pt')
+output = model.generate(input_ids=input_ids, max_length=100, top_k=5)
+generated_response = tokenizer.decode(output[0], skip_special_tokens=True)
+print(generated_response)
+
+# Fine-tune the model on a conversational dataset
+conversational_dataset = [("Hi, how are you today?", "I'm doing well, thank you. How about you?"),                          ("What's your favorite food?", "I don't have a favorite food as I am an AI language model."),                          ("What's the weather like today?", "I'm sorry, I don't have access to current weather information.")]
+num_epochs = 10
+batch_size = 4
+optimizer = transformers.AdamW(model.parameters(), lr=2e-5)
+loss_fn = transformers.CrossEntropyLoss()
+for epoch in range(num_epochs):
+    total_loss = 0
+    for (inputs, targets) in conversational_dataset:
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = loss_fn(outputs, targets)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print("Epoch: {}, Loss: {}".format(epoch, total_loss))
+model.save_pretrained("gpt2-finetuned")
+
+# Encode an input text into token IDs
+def tokenize_and_encode(text):
+    input_ids = tokenizer.encode(text, return_tensors='pt')
+    input_ids = input_ids.to('cuda') if torch.cuda.is_available() else input_ids.to('cpu')
+    return input_ids
+input_text = "What is the capital of France?"
+input_ids = tokenize_and_encode(input_text)
+print(input_ids)
+    
+ChatGPT
+
+import openai
+
+# Apply API Key
+openai.api_key = "YOUR_API_KEY"
+
+def generate_answer(question):
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=question,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    return response["choices"][0]["text"]
+
+# Example usage
+answer = generate_answer("What is the capital of France?")
+print(answer)
+    
+censorship
+
+import re
+import numpy as np
+import tensorflow as tf
+
+# Load the database with offensive words and their appropriate replacements
+with open('word_database.txt', 'r') as file:
+    words = file.readlines()
+
+offensive_words = [word.split(',')[0] for word in words]
+appropriate_words = [word.split(',')[1].strip() for word in words]
+
+# Define the neural network
+model = tf.keras.Sequential([
+    tf.keras.layers.Embedding(len(offensive_words), 128, input_length=1),
+    tf.keras.layers.LSTM(128),
+    tf.keras.layers.Dense(len(appropriate_words), activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the neural network on the word database
+def one_hot_encode(word, words_list):
+    encoded = np.zeros(len(words_list))
+    encoded[words_list.index(word)] = 1
+    return encoded
+
+x_train = [one_hot_encode(word, offensive_words) for word in offensive_words]
+y_train = [one_hot_encode(word, appropriate_words) for word in appropriate_words]
+
+model.fit(x_train, y_train, epochs=100)
+
+# Replace offensive words in a given text with appropriate words
+def replace_words(text):
+    text = text.split()
+    for i, word in enumerate(text):
+        if word in offensive_words:
+            encoded = one_hot_encode(word, offensive_words)
+            encoded = np.reshape(encoded, (1, -1))
+            predicted_word = appropriate_words[np.argmax(model.predict(encoded))]
+            text[i] = predicted_word
+    return ' '.join(text)
+
+# Example usage
+text = "This is a bad text with some offensive words."
+print("Original text:", text)
+print("Cleaned text:", replace_words(text))
+
+final
+
+!pip install transformers
+import transformers
+import string
+import tensorflow as tf
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+import pandas as pd
+import numpy as np
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'], maxlen=max_length, padding='post')
+
+# Load the pre-trained GPT2 model
+tokenizer = transformers.GPT2Tokenizer.from_pretrained("gpt2")
+model = transformers.GPT2LMHeadModel.from_pretrained("gpt2")
+model.eval()
+
+# Generate input ids from a given text
+input_ids = torch.tensor(tokenizer.encode("Hello, I am a language model.")).unsqueeze(0)
+
+# Generate predictions for GPT2
+with torch.no_grad():
+    outputs = model(input_ids)
+    predictions = outputs[0]
+
+# Get the predicted next word(s)
+predicted_next_word = tokenizer.decode(torch.argmax(predictions[0, -1, :]).tolist())
+print(f"Predicted next word (GPT2): {predicted_next_word}")
+
+# Load the pre-trained BERT model for sequence classification
+tokenizer = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
+model = transformers.BertForSequenceClassification.from_pretrained("bert-base-uncased")
+model.eval()
+
+UE5 scene generation
+
+import tensorflow as tf
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# Define the model architecture (using Tensorflow)
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.Dense(64, activation='relu', input_shape=(input_shape,)))
+model.add(tf.keras.layers.Dense(64, activation='relu'))
+model.add(tf.keras.layers.Dense(output_shape, activation='softmax'))
+
+# Compile the model
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Train the model on the dataset of examples
+model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+# Use the trained model to generate outputs for controlling Unreal Engine 5 environment
+outputs = model.predict(x_test)
+
+# Define the neural network architecture (using PyTorch)
+class NeuralNet(nn.Module):
+    def init(self):
+        super(NeuralNet, self).init()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, output_dim)
+
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Initialize the network
+input_dim = 100
+hidden_dim = 50
+output_dim = 10
+model = NeuralNet()
+
+# Define the loss function and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), lr=0.01)
+
+# Train the network
+for epoch in range(100):
+    # Forward pass
+    outputs = model(inputs)
+    loss = criterion(outputs, labels)
+
+    # Backward pass and optimization
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    # Print the loss
+    if (epoch+1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/100], Loss: {loss.item():.4f}')
+
+# Save the trained model
+torch.save(model.state_dict(), 'model.pt')
+
+# Unreal Engine 5 code for the plugin
+#include "CoreMinimal.h"
+#include "TorchModel.h"
+#include "torch/script.h"
+#include "VoiceInput.h"
+
+UTorchModel::UTorchModel()
+{
+    // Load the model from file
+    torch::jit::script::Module module = torch::jit::load("model.pt");
+}
+
+void UTorchModel::GenerateScene(FString voiceCommand)
+{
+    // Use the model to generate a new scene based on the voice command
+    ...
+
+    // Update the environment in Unreal Engine 5 using the Unreal Engine 5 API
+    ...
+}
+
+void UTorchModel::OnVoiceCommandReceived(FString

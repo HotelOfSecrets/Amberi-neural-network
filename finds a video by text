@@ -1,0 +1,20 @@
+import tensorflow as tf
+from tensorflow.keras.layers import Input, LSTM, Dense
+
+# Define the model architecture
+input_text = Input(shape=(text_input_length,))
+x = Embedding(input_dim=vocabulary_size, output_dim=embedding_size)(input_text)
+x = LSTM(units=hidden_units)(x)
+output = Dense(units=video_classes, activation='softmax')(x)
+
+model = Model(inputs=input_text, outputs=output)
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model on the training data
+model.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_val, y_val))
+
+# Use the model to predict the video class for a given text description
+predictions = model.predict(X_test)
+
+
+This code uses TensorFlow and the Keras API to define and train an LSTM to match text to video.

@@ -1,0 +1,75 @@
+!pip install transformers nltk
+import transformers
+import pandas as pd
+import numpy as np
+import string
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+import torch
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from collections import Counter
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+
+# Load the dialog data into a pandas DataFrame
+dialog_data = pd.read_csv("dialog_data.csv")
+
+# Convert all text to lowercase
+dialog_data['text'] = dialog_data['text'].str.lower()
+
+# Remove punctuation and stop words
+punctuation = string.punctuation
+stop_words = set(stopwords.words('english'))
+dialog_data['text'] = dialog_data['text'].apply(lambda x: ' '.join([word for word in word_tokenize(x) if word not in punctuation and word not in stop_words]))
+
+# Tokenize the text
+dialog_data['text'] = dialog_data['text'].apply(lambda x: word_tokenize(x))
+
+# Convert words to numerical representation
+word_counter = Counter()
+for text in dialog_data['text']:
+    for word in text:
+        word_counter[word] += 1
+
+word_index = {word: i+1 for i, (word, count) in enumerate(word_counter.most_common())}
+dialog_data['text'] = dialog_data['text'].apply(lambda x: [word_index[word] for word in x])
+
+# Pad the sequences to the same length
+max_length = max([len(text) for text in dialog_data['text']])
+dialog_data['text'] = pad_sequences(dialog_data['text'].tolist(), maxlen=max_length, padding='post')
+
+# Load the pre-trained GPT2 model
+tokenizer_gpt2 = transformers.GPT2Tokenizer.from_pretrained("gpt2")
+model_gpt2 = transformers.GPT2LMHeadModel.from_pretrained("gpt2")
+
+# Generate input ids from a given text
+input_ids = torch.tensor(tokenizer_gpt2.encode("Hello, I am a language model.", return_tensors='pt'))
+
+# Generate predictions for GPT2
+with torch.no_grad():
+    outputs = model_gpt2(input_ids)
+    predictions = outputs.logits
+
+# Get the predicted next word(s)
+predicted_next_word = tokenizer_gpt2.decode(torch.argmax(predictions[0, -1, :]).item())
+print(f"Predicted next word (GPT2): {predicted_next_word}")
+
+# Load the pre-trained BERT model for sequence classification
+tokenizer_bert = transformers.BertTokenizer.from_pretrained("bert-base-uncased")
+model_bert = transformers.BertForSequenceClassification.from_pretrained("bert-base-uncased")
+
+# Prepare a sample text and its label
+text = "Hello, I am a sample text for BERT."
+label = 1  # replace with actual label
+
+# Encode the text
+inputs = tokenizer_bert(text, return_tensors='pt', padding=True, truncation=True, max_length=512)
+inputs['labels'] = torch.tensor([label]).unsqueeze(0)
+
+# Forward pass
+outputs = model_bert(**inputs)
+
+# Get the predicted class
+predicted_class = torch.argmax(outputs.logits).item()
+print(f"Predicted class (BERT):
